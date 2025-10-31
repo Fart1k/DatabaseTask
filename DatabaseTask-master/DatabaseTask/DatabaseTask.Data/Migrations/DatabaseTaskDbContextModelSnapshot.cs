@@ -44,12 +44,7 @@ namespace DatabaseTask.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ReceiptId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ReceiptId");
 
                     b.ToTable("Clients");
                 });
@@ -72,7 +67,7 @@ namespace DatabaseTask.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ReceiptId")
+                    b.Property<Guid?>("OfficeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Salary")
@@ -80,7 +75,7 @@ namespace DatabaseTask.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ReceiptId");
+                    b.HasIndex("OfficeId");
 
                     b.ToTable("Employees");
                 });
@@ -95,16 +90,11 @@ namespace DatabaseTask.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("EmployeeId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Offices");
                 });
@@ -126,16 +116,11 @@ namespace DatabaseTask.Data.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("Receipt_ProductId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Receipt_ProductId");
 
                     b.ToTable("Products");
                 });
@@ -146,10 +131,13 @@ namespace DatabaseTask.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ClientId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("Receipt_ProductId")
+                    b.Property<Guid?>("EmployeeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("TotalAmount")
@@ -158,7 +146,9 @@ namespace DatabaseTask.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Receipt_ProductId");
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Receipts");
                 });
@@ -172,67 +162,77 @@ namespace DatabaseTask.Data.Migrations
                     b.Property<int>("PriceDuringSale")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Quantity")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("ReceiptId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ReceiptId");
 
                     b.ToTable("Receipt_Products");
                 });
 
-            modelBuilder.Entity("DatabaseTask.Core.Domain.Client", b =>
-                {
-                    b.HasOne("DatabaseTask.Core.Domain.Receipt", null)
-                        .WithMany("Client")
-                        .HasForeignKey("ReceiptId");
-                });
-
             modelBuilder.Entity("DatabaseTask.Core.Domain.Employee", b =>
                 {
-                    b.HasOne("DatabaseTask.Core.Domain.Receipt", null)
-                        .WithMany("Employee")
-                        .HasForeignKey("ReceiptId");
+                    b.HasOne("DatabaseTask.Core.Domain.Office", null)
+                        .WithMany("Employees")
+                        .HasForeignKey("OfficeId");
                 });
 
-            modelBuilder.Entity("DatabaseTask.Core.Domain.Office", b =>
+            modelBuilder.Entity("DatabaseTask.Core.Domain.Receipt", b =>
                 {
+                    b.HasOne("DatabaseTask.Core.Domain.Client", null)
+                        .WithMany("Receipts")
+                        .HasForeignKey("ClientId");
+
                     b.HasOne("DatabaseTask.Core.Domain.Employee", null)
-                        .WithMany("Office")
+                        .WithMany("Receipts")
                         .HasForeignKey("EmployeeId");
-                });
-
-            modelBuilder.Entity("DatabaseTask.Core.Domain.Product", b =>
-                {
-                    b.HasOne("DatabaseTask.Core.Domain.Receipt_Product", null)
-                        .WithMany("Products")
-                        .HasForeignKey("Receipt_ProductId");
-                });
-
-            modelBuilder.Entity("DatabaseTask.Core.Domain.Receipt", b =>
-                {
-                    b.HasOne("DatabaseTask.Core.Domain.Receipt_Product", null)
-                        .WithMany("Receipt")
-                        .HasForeignKey("Receipt_ProductId");
-                });
-
-            modelBuilder.Entity("DatabaseTask.Core.Domain.Employee", b =>
-                {
-                    b.Navigation("Office");
-                });
-
-            modelBuilder.Entity("DatabaseTask.Core.Domain.Receipt", b =>
-                {
-                    b.Navigation("Client");
-
-                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("DatabaseTask.Core.Domain.Receipt_Product", b =>
                 {
-                    b.Navigation("Products");
+                    b.HasOne("DatabaseTask.Core.Domain.Product", null)
+                        .WithMany("Receipt_Products")
+                        .HasForeignKey("ProductId");
 
-                    b.Navigation("Receipt");
+                    b.HasOne("DatabaseTask.Core.Domain.Receipt", null)
+                        .WithMany("Receipt_Products")
+                        .HasForeignKey("ReceiptId");
+                });
+
+            modelBuilder.Entity("DatabaseTask.Core.Domain.Client", b =>
+                {
+                    b.Navigation("Receipts");
+                });
+
+            modelBuilder.Entity("DatabaseTask.Core.Domain.Employee", b =>
+                {
+                    b.Navigation("Receipts");
+                });
+
+            modelBuilder.Entity("DatabaseTask.Core.Domain.Office", b =>
+                {
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("DatabaseTask.Core.Domain.Product", b =>
+                {
+                    b.Navigation("Receipt_Products");
+                });
+
+            modelBuilder.Entity("DatabaseTask.Core.Domain.Receipt", b =>
+                {
+                    b.Navigation("Receipt_Products");
                 });
 #pragma warning restore 612, 618
         }

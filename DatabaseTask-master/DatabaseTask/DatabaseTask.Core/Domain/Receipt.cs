@@ -12,9 +12,9 @@ namespace DatabaseTask.Core.Domain
         public DateTime Date { get; set; }
         public string TotalAmount { get; set; }
 
-        public IEnumerable<Employee> Employee { get; set; } = new List<Employee>();
+        public IEnumerable<Receipt_Product> Receipt_Products { get; set; } = new List<Receipt_Product>();
 
-        public IEnumerable<Client> Client { get; set; } = new List<Client>();
+
 
     }
 }

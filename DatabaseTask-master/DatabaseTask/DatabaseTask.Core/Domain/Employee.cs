@@ -13,8 +13,8 @@ namespace DatabaseTask.Core.Domain
         public string LastName { get; set; } = string.Empty;
         public string JobTitle { get; set; } = string.Empty;
         public int Salary { get; set; }
-        
-        public IEnumerable<Office> Office { get; set; } = new List<Office>();
+
+        public IEnumerable<Receipt> Receipts { get; set; } = new List<Receipt>();
 
     }
 }

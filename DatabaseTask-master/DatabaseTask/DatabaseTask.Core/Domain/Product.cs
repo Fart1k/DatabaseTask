@@ -14,7 +14,7 @@ namespace DatabaseTask.Core.Domain
         public string Status { get; set; } = string.Empty;
         public string Category { get; set; } = string.Empty;
 
-
+        public IEnumerable<Receipt_Product> Receipt_Products { get; set; } = new List<Receipt_Product>();
 
     }
 }

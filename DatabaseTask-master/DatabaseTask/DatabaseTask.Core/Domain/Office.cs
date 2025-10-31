@@ -11,5 +11,7 @@ namespace DatabaseTask.Core.Domain
         public Guid Id { get; set; }
         public string Address { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
+
+        public IEnumerable<Employee> Employees { get; set; } = new List<Employee>();
     }
 }
