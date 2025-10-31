@@ -1,8 +1,30 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model IEnumerable<DatabaseTask.Core.Domain.Employee>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<body style="padding: 10px">
+	<div class="col-xs-8">
+		<div class="panel-heading">
+			<h3>Employees</h3>
+		</div>
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th scope="col">FirstName</th>
+					<th scope="col">LastName</th>
+					<th scope="col">JobTitle</th>
+					<th scope="col">Salary</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var emp in Model)
+				{
+					<tr>
+						<td>@emp.FirstName</td>
+						<td>@emp.LastName</td>
+						<td>@emp.JobTitle</td>
+						<td>@emp.Salary</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</body>
